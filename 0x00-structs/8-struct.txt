@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+/**
+*struct packing in C
+*/
+
+/**
+*Recall, from 7-struct.txt, there are no solutions; only trade-offs.
+*trade-off is between padding (results in wasted mem) and packing (results in wasted CPU cycles)
+*to minimise/eliminate mem wastage, use `#pragma pack(1)`
+*you have to love the...shall we say, pragmatic, name it has.
+*/
+
+/**
+*demo using struct abc
+#pragma pack(1)
+
+struct abc {
+    char a; 
+    char b; 
+    int c;
+}var;
+
+*what, pray tell, is `#pragma pack(1)`?
+*Glad you asked...
+* `#pragma` is a special-purpose directive, 
+* examples of directives are: `#include` or `#ifndef` etc,
+* used to turn on/off certain features.
+* `#pragma pack(1)` turns on `pack()`; 0 = OFF, 1 = ON
+* `#pragma pack` instructs the compiler to pack struct members using
+* the most mem-efficient alignment.
+* sizeof(abc) = 6 always in both 32 and 64-bit arch.
+*/
+
+/**
+*Summary:
+* There are no solutions; only trade-offs
+* Trade-off is between padding (wasted mem) and packing (wasted CPU cycles)
+* Machine arch is an ultimate factor; it dictates whether packing or padding
+*will occur and how, assuming any will occur
+* Do you care about mem usage? Y -> pack, N -> pad
+* Do you care about CPU cycles? Y -> pad, N -> pack
+*/

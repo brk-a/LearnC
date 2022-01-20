@@ -1,0 +1,68 @@
+#include <stdio.h>
+
+/**
+*struct padding in C
+*/
+
+//a contiguous block of mem is allocated to a
+//struct members when the struct is declared
+
+//Processor does not read one byte at a time,
+//it reads one word at a time.
+
+//That is all well and good, would you please
+//interpret for the dummy (me) at the back?
+
+//Gladly...
+
+//Say we have an 8-bit processor
+//the processor will access 1 byte at a time
+//that is, 1 group each 8 bits long
+//ergo, 1 word in an 8-bit machine = 1 byte
+//1 word in a 32-bit maquina, using the
+//same logic, = 4 bytes
+//1 word in a 64-bit maschine is 8 bytes
+//Sawa?
+
+//Sawa...
+
+/**
+*assume a 32-bit machine comes across this code
+*also assume: sizeof(int) = 4 and sizeof(char) = 1
+struct abc {
+    char a; 
+    char b; 
+    int c;
+}var;
+
+*One CPU cycle will only be sufficient for `char a`, `char b`
+*and half of `int c` (Recall, 1 word = 4 bytes). 2 CPU cycles
+*are rqd to access `int c`; half of the bytes in cycle 1 and
+*half in cycle 2.
+*There are no solutions; only trade-offs...
+*trade-off between wastage of CPU cycles and wastage of mem.
+*the machine will "pad" the contigous mem block
+*and store/read/process the int in the next available word
+*if the goal is CPU-cycle-efficiency.
+*the mem block will be viz:
+* _____________________________________________________________
+* | 0x01   |  0x02  | 0x03 | 0x04  | 0x05 | 0x06 | 0x07 | 0x08 |
+* -------------------------------------------------------------
+* | char a | char b | <--empty-->  |           int c           |
+* -------------------------------------------------------------
+* | <---------- word #1 ---------> |  <------- word #2 ------> |
+* -------------------------------------------------------------
+*ergo, sizeof(abc) returns 8, not 6. (which is partly mhy malloc is recommended //why->mhy
+*for mem alloc)
+*Order of variables matters too.
+*Say the order is: `char a`, `int c` then `char b`. sizeof(abc) returns 12.
+* `a` at 0x01, 0x02 to 0x04 are empty, `c` at 0x05 - 0x08, `b` at 0x09
+* and 0x0A - 0x0C are empty.
+*If the order is: `int c`, `char a` then `char b`, sizeof(abc) returns 8.
+*`c` at 0x01 to 0x04, `a` at 0x05, `b` at 0x06; 0x07 and 0x08 are empty.
+*All this = nonsense in 64-bit arch because everything is accesible in one
+*CPU cycle, because 1 word = 8 bytes (or the whole mem range illustrated above). 
+*2 bytes will be wasted too, however, they will be at addr 0x07
+*and 0x08, using the illustration above.
+*sizeof(abc) will be 8 always in 64-bit arch.
+*/
