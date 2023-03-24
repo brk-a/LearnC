@@ -4,6 +4,7 @@
 
 ### Aim
 
+* learn the OG context of C
 * re-learn
     * types, operators and expressions
     * control flow
