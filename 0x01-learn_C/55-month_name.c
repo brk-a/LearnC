@@ -25,3 +25,17 @@ struct  date *pd;
         day += day_tab[leap][i];
     return(day);
 };
+
+month_day(pd)/*set month and day from day of year*/
+struct  date *pd;
+{
+    int i, leap;
+
+    leap = pd->year % 4 == 0 && pd->year % 100 != 0 || pd->year % 400 == 0;
+    pd->day = pd->yearday;
+
+    for(i=1; pd->day>day_tab[leap][i]; i++)
+        pd->day -= day_tab[leap][i];
+    pd->month = i;
+}
+
