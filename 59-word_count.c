@@ -44,8 +44,12 @@ char *w;
     return(p);
 }
 
-treeprint(r)/**/
-struct tnode r;
+treeprint(p)/*print tree p recursively*/
+struct tnode *p;
 {
-
+    if(p!=NULL){
+        treeprint(p->left);
+        printf("%4d %s", p->count, p->word);
+        treeprint(p->right);
+    }
 }
